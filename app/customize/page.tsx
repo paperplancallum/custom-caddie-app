@@ -17,7 +17,7 @@ export default function CustomizePage() {
   const [loading, setLoading] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
   
-  const initialSet = (searchParams.get('set') as any) || 'signature'
+  const initialSet = (searchParams.get('set') as 'executive' | 'signature') || 'signature'
   
   const [customization, setCustomization] = useState<GiftBoxCustomization>({
     recipient: {
