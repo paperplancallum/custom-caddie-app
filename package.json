@@ -1,0 +1,43 @@
+{
+  "name": "custom-caddie-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
+    "@stripe/stripe-js": "^7.8.0",
+    "@types/node": "^24.2.0",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "airtable": "^0.12.2",
+    "autoprefixer": "^10.4.21",
+    "canvas": "^3.1.2",
+    "clsx": "^2.1.1",
+    "confetti-js": "^0.0.18",
+    "framer-motion": "^12.23.12",
+    "lucide-react": "^0.536.0",
+    "next": "^15.4.6",
+    "postcss": "^8.5.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.62.0",
+    "resend": "^5.0.0",
+    "sharp": "^0.34.3",
+    "stripe": "^18.4.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.9.2",
+    "zod": "^4.0.15",
+    "zustand": "^5.0.7"
+  }
+}
