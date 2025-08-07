@@ -259,9 +259,21 @@ function CustomizeContent() {
           setName: GIFT_SETS[customization.set].name
         })
       })
-      const { checkoutUrl } = await checkoutResponse.json()
       
-      window.location.href = checkoutUrl
+      if (!checkoutResponse.ok) {
+        const error = await checkoutResponse.text()
+        console.error('Checkout API error:', error)
+        throw new Error('Failed to create checkout session')
+      }
+      
+      const data = await checkoutResponse.json()
+      console.log('Checkout response:', data)
+      
+      if (!data.checkoutUrl) {
+        throw new Error('No checkout URL received')
+      }
+      
+      window.location.href = data.checkoutUrl
     } catch (error) {
       console.error('Checkout error:', error)
       alert('Something went wrong. Please try again.')
