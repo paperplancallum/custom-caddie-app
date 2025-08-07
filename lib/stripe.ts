@@ -10,11 +10,13 @@ export async function createCheckoutSession({
   customerEmail,
   items,
   amount,
+  setName,
 }: {
   designId: string
   customerEmail: string
   items: any
   amount: number
+  setName: string
 }) {
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -24,11 +26,11 @@ export async function createCheckoutSession({
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Custom Caddie Golf Set',
-            description: 'Personalized golf accessories with custom engraving and embroidery',
-            images: ['https://example.com/golf-set.jpg'],
+            name: `Custom Caddie ${setName}`,
+            description: 'Personalized golf accessories with custom engraving and embroidery. Includes free shipping to US addresses.',
+            images: ['https://custom-caddie-app.vercel.app/custom-caddie-logo.png'],
           },
-          unit_amount: amount,
+          unit_amount: amount * 100, // Convert to cents
         },
         quantity: 1,
       },
@@ -39,19 +41,20 @@ export async function createCheckoutSession({
     metadata: {
       designId,
       items: JSON.stringify(items),
+      setType: setName,
     },
     shipping_address_collection: {
-      allowed_countries: ['US', 'CA'],
+      allowed_countries: ['US'], // US only shipping
     },
     shipping_options: [
       {
         shipping_rate_data: {
           type: 'fixed_amount',
           fixed_amount: {
-            amount: 0,
+            amount: 0, // Free shipping
             currency: 'usd',
           },
-          display_name: 'Free shipping',
+          display_name: 'Free US Shipping',
           delivery_estimate: {
             minimum: {
               unit: 'business_day',
@@ -60,26 +63,6 @@ export async function createCheckoutSession({
             maximum: {
               unit: 'business_day',
               value: 7,
-            },
-          },
-        },
-      },
-      {
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: {
-            amount: 1500,
-            currency: 'usd',
-          },
-          display_name: 'Express shipping',
-          delivery_estimate: {
-            minimum: {
-              unit: 'business_day',
-              value: 2,
-            },
-            maximum: {
-              unit: 'business_day',
-              value: 3,
             },
           },
         },

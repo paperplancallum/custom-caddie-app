@@ -255,7 +255,8 @@ function CustomizeContent() {
           designId,
           customerEmail: 'customer@example.com',
           items: customization,
-          amount: total * 100
+          amount: total, // Already in dollars
+          setName: GIFT_SETS[customization.set].name
         })
       })
       const { checkoutUrl } = await checkoutResponse.json()

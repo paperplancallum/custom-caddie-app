@@ -4,13 +4,14 @@ import { createCheckoutSession } from '@/lib/stripe'
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { designId, customerEmail, items, amount } = body
+    const { designId, customerEmail, items, amount, setName } = body
 
     const session = await createCheckoutSession({
       designId,
       customerEmail,
       items,
       amount,
+      setName,
     })
 
     return NextResponse.json({ 
