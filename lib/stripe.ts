@@ -1,13 +1,12 @@
 import Stripe from 'stripe'
 
-if (!process.env.STRIPE_SECRET_KEY) {
-  throw new Error('STRIPE_SECRET_KEY is not set in environment variables')
-}
-
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2025-07-30.basil',
-  typescript: true,
-})
+// Only initialize Stripe if we have a key
+export const stripe = process.env.STRIPE_SECRET_KEY 
+  ? new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2024-12-18.acacia' as any, // Use older stable API version
+      typescript: true,
+    })
+  : null
 
 export async function createCheckoutSession({
   designId,
@@ -22,6 +21,10 @@ export async function createCheckoutSession({
   amount: number
   setName: string
 }) {
+  if (!stripe) {
+    throw new Error('Stripe is not configured. Please check your environment variables.')
+  }
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
     customer_email: customerEmail,
