@@ -116,7 +116,7 @@ export default function RealisticProductPreview({ customization, activeStep }: R
                     className="text-black"
                     style={{
                       fontFamily: FONT_STYLES[items.golfBalls.personalization.line1?.font || 'classic']?.style?.fontFamily || 'serif',
-                      fontWeight: FONT_STYLES[items.golfBalls.personalization.line1?.font || 'classic']?.style?.fontWeight || 'normal',
+                      fontWeight: (FONT_STYLES[items.golfBalls.personalization.line1?.font || 'classic']?.style as any)?.fontWeight || 'normal',
                       fontSize: `${items.golfBalls.personalization.line1?.size || 20}px`,
                       textTransform: items.golfBalls.personalization.line1?.textCase === 'uppercase' ? 'uppercase' : 
                                      items.golfBalls.personalization.line1?.textCase === 'capitalize' ? 'capitalize' : 
@@ -135,7 +135,7 @@ export default function RealisticProductPreview({ customization, activeStep }: R
                       className="text-black mt-1"
                       style={{
                         fontFamily: FONT_STYLES[items.golfBalls.personalization.line2?.font || 'classic']?.style?.fontFamily || 'serif',
-                        fontWeight: FONT_STYLES[items.golfBalls.personalization.line2?.font || 'classic']?.style?.fontWeight || 'normal',
+                        fontWeight: (FONT_STYLES[items.golfBalls.personalization.line2?.font || 'classic']?.style as any)?.fontWeight || 'normal',
                         fontSize: `${items.golfBalls.personalization.line2?.size || 14}px`,
                         textTransform: items.golfBalls.personalization.line2?.textCase === 'uppercase' ? 'uppercase' : 
                                        items.golfBalls.personalization.line2?.textCase === 'capitalize' ? 'capitalize' : 

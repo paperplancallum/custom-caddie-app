@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -8,11 +8,11 @@ import { ArrowLeft, Check, User, Package, Gift, Plus, Minus } from 'lucide-react
 import { GIFT_SETS, OCCASIONS, RELATIONSHIPS, GiftBoxCustomization } from '@/types/giftbox'
 import { FONT_STYLES, FONT_SIZES } from '@/lib/fonts'
 import { CREST_FONTS } from '@/lib/crest-fonts'
-import ProductPreview from '@/components/ProductPreview'
+// import ProductPreview from '@/components/ProductPreview'
 import RealisticProductPreview from '@/components/RealisticProductPreview'
 import CrestPNGMeasured from '@/components/CrestPNGMeasured'
 
-export default function CustomizePage() {
+function CustomizeContent() {
   const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
@@ -118,8 +118,7 @@ export default function CustomizePage() {
         golfBalls: {
           ...prev.items.golfBalls,
           personalization: {
-            ...prev.items.golfBalls.personalization,
-            text: prev.items.golfBalls.personalization.type === 'initials' ? initials : prev.items.golfBalls.personalization.text
+            ...prev.items.golfBalls.personalization
           }
         },
         golfTowel: {
@@ -132,8 +131,7 @@ export default function CustomizePage() {
         divotTool: {
           ...prev.items.divotTool,
           personalization: {
-            ...prev.items.divotTool.personalization,
-            text: prev.items.divotTool.personalization.type === 'initials' ? initials : prev.items.divotTool.personalization.text
+            ...prev.items.divotTool.personalization
           }
         }
       }
@@ -706,7 +704,7 @@ export default function CustomizePage() {
                         key={fontKey}
                         onClick={() => setCustomization(prev => ({
                           ...prev,
-                          crestFont: fontKey
+                          crestFont: fontKey as 'serif' | 'sans' | 'script' | 'gothic' | 'modern'
                         }))}
                         className={`py-4 px-4 border transition-all ${
                           customization.crestFont === fontKey
@@ -774,7 +772,7 @@ export default function CustomizePage() {
                               className="text-black"
                               style={{
                                 fontFamily: FONT_STYLES[customization.items.golfBalls.personalization.line1?.font || 'classic']?.style?.fontFamily || 'serif',
-                                fontWeight: FONT_STYLES[customization.items.golfBalls.personalization.line1?.font || 'classic']?.style?.fontWeight || 'normal',
+                                fontWeight: (FONT_STYLES[customization.items.golfBalls.personalization.line1?.font || 'classic']?.style as any)?.fontWeight || 'normal',
                                 fontSize: `${(customization.items.golfBalls.personalization.line1?.size || 20) * 0.9}px`,
                                 textTransform: customization.items.golfBalls.personalization.line1?.textCase === 'uppercase' ? 'uppercase' : 
                                                customization.items.golfBalls.personalization.line1?.textCase === 'capitalize' ? 'capitalize' : 
@@ -791,7 +789,7 @@ export default function CustomizePage() {
                                 className="text-black mt-1"
                                 style={{
                                   fontFamily: FONT_STYLES[customization.items.golfBalls.personalization.line2?.font || 'classic']?.style?.fontFamily || 'serif',
-                                  fontWeight: FONT_STYLES[customization.items.golfBalls.personalization.line2?.font || 'classic']?.style?.fontWeight || 'normal',
+                                  fontWeight: (FONT_STYLES[customization.items.golfBalls.personalization.line2?.font || 'classic']?.style as any)?.fontWeight || 'normal',
                                   fontSize: `${(customization.items.golfBalls.personalization.line2?.size || 14) * 0.9}px`,
                                   textTransform: customization.items.golfBalls.personalization.line2?.textCase === 'uppercase' ? 'uppercase' : 
                                                  customization.items.golfBalls.personalization.line2?.textCase === 'capitalize' ? 'capitalize' : 
@@ -1442,8 +1440,7 @@ export default function CustomizePage() {
                                   ...prev.items.golfTees.personalization,
                                   type,
                                   text: type === 'initials' ? prev.recipient.initials : 
-                                        type === 'name' ? prev.recipient.name :
-                                        type === 'date' ? new Date().getFullYear().toString() : ''
+                                        type === 'name' ? prev.recipient.name : ''
                                 }
                               }
                             }
@@ -2027,7 +2024,7 @@ export default function CustomizePage() {
                 <h3 className="text-sm uppercase tracking-wider text-[#7C8471] mb-4">Live Preview</h3>
                 
                 <div className="h-64 bg-gradient-to-br from-[#FAF7F2] to-white rounded-lg">
-                  <ProductPreview customization={customization} activeStep={activeStep} />
+                  {/* <ProductPreview customization={customization} activeStep={activeStep} /> */}
                 </div>
               </div>
             ) : null}
@@ -2091,5 +2088,13 @@ export default function CustomizePage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function CustomizePage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CustomizeContent />
+    </Suspense>
   )
 }
