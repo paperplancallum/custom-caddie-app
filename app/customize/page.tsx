@@ -35,7 +35,7 @@ export default function CustomizePage() {
     items: {
       golfBalls: {
         included: true,
-        quantity: GIFT_SETS[initialSet].golfBallQuantity,
+        quantity: GIFT_SETS[initialSet].golfBallQuantity as 6 | 12 | 24,
         personalization: {
           style: 'crest',
           crestSize: 100,
@@ -57,7 +57,7 @@ export default function CustomizePage() {
       },
       golfTees: {
         included: true,
-        quantity: GIFT_SETS[initialSet].golfTeeQuantity,
+        quantity: GIFT_SETS[initialSet].golfTeeQuantity as 25 | 50 | 100,
         color: 'natural',
         personalization: {
           type: 'name',
@@ -148,11 +148,11 @@ export default function CustomizePage() {
         ...prev.items,
         golfBalls: {
           ...prev.items.golfBalls,
-          quantity: GIFT_SETS[prev.set].golfBallQuantity
+          quantity: GIFT_SETS[prev.set].golfBallQuantity as 6 | 12 | 24
         },
         golfTees: {
           ...prev.items.golfTees,
-          quantity: GIFT_SETS[prev.set].golfTeeQuantity
+          quantity: GIFT_SETS[prev.set].golfTeeQuantity as 25 | 50 | 100
         }
       }
     }))
