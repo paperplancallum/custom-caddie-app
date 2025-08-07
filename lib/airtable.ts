@@ -2,14 +2,18 @@ import Airtable from 'airtable'
 import { CustomizerState, Design, Order } from '@/types'
 import { generateOrderId } from './utils'
 
-const base = process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID
-  ? new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID)
-  : null
+const getBase = () => {
+  if (process.env.AIRTABLE_API_KEY && process.env.AIRTABLE_BASE_ID) {
+    return new Airtable({ apiKey: process.env.AIRTABLE_API_KEY }).base(process.env.AIRTABLE_BASE_ID)
+  }
+  return null
+}
 
 export async function saveDesignToAirtable(
   design: CustomizerState,
   email?: string
 ): Promise<{ id: string; shareUrl: string; editUrl: string }> {
+  const base = getBase()
   if (!base) {
     // Fallback for development without Airtable
     const id = Math.random().toString(36).substr(2, 9)
@@ -21,7 +25,7 @@ export async function saveDesignToAirtable(
   }
 
   try {
-    const record = await base('Designs').create({
+    const record = await base!('Designs').create({
       'Email': email || '',
       'Design Data': JSON.stringify(design),
       'Status': 'Draft',
@@ -40,13 +44,14 @@ export async function saveDesignToAirtable(
 }
 
 export async function getDesignFromAirtable(designId: string): Promise<Design | null> {
+  const base = getBase()
   if (!base) {
     // Fallback for development
     return null
   }
 
   try {
-    const record = await base('Designs').find(designId)
+    const record = await base!('Designs').find(designId)
     
     return {
       id: record.id,
@@ -74,6 +79,7 @@ export async function createOrderInAirtable(orderData: {
 }): Promise<Order> {
   const orderId = generateOrderId()
 
+  const base = getBase()
   if (!base) {
     // Fallback for development
     return {
@@ -91,7 +97,7 @@ export async function createOrderInAirtable(orderData: {
   }
 
   try {
-    const record = await base('Orders').create({
+    const record = await base!('Orders').create({
       'Order ID': orderId,
       'Stripe Payment ID': orderData.stripePaymentId,
       'Design': [orderData.designId],
@@ -126,18 +132,19 @@ export async function updateOrderStatus(
   status: Order['status'],
   trackingNumber?: string
 ): Promise<void> {
+  const base = getBase()
   if (!base) {
     return
   }
 
   try {
-    const records = await base('Orders').select({
+    const records = await base!('Orders').select({
       filterByFormula: `{Order ID} = '${orderId}'`,
       maxRecords: 1,
     }).firstPage()
 
     if (records.length > 0) {
-      await base('Orders').update(records[0].id, {
+      await base!('Orders').update(records[0].id, {
         'Status': status.charAt(0).toUpperCase() + status.slice(1),
         ...(trackingNumber && { 'Tracking Number': trackingNumber }),
       })
